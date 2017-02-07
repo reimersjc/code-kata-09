@@ -7,13 +7,12 @@ class CheckOut {
 
     private val cart = hashMapOf<Item, Int>()
     private val itemDAO = ItemDAO()
-    private val pricingRuleChain = PricingRuleFactory.getChain()
 
     fun scan(sku: String) {
         val item = itemDAO.getItem(sku)
 
-        // Update quantity of item in cart, adding if it does not exist
-        cart.compute(item) { item, qty -> (qty ?: 0) + 1}
+        // Update qty of item in cart, adding if it does not exist
+        cart.compute(item) { item, qty -> (qty ?: 0).inc() }
     }
 
     fun total(): Int {
@@ -23,7 +22,7 @@ class CheckOut {
                 .fold(0) { total, next -> total + next }
 
         // Calculate and apply discounts for each pricing rule in chain
-        val discount = pricingRuleChain.calculateDiscount(cart, 0)
+        val discount = PricingRuleFactory.getChain().calculateDiscount(cart, 0)
 
         return total - discount
     }

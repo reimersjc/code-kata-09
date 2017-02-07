@@ -9,8 +9,8 @@ class PricingRuleFactory private constructor() {
         val itemDAO = ItemDAO()
 
         fun getChain(): PricingRule {
-            val discountA = PricingRule(itemDAO.getItem("A"), 3, 130)
-            val discountB = PricingRule(itemDAO.getItem("B"), 2, 45)
+            val discountA = QtyDiscountPricingRule(itemDAO.getItem("A"), 3, 130)
+            val discountB = QtyDiscountPricingRule(itemDAO.getItem("B"), 2, 45)
             discountA.successor = discountB
             return discountA
         }
