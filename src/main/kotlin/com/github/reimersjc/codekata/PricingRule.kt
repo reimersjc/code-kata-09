@@ -12,23 +12,28 @@ package com.github.reimersjc.codekata
  */
 class PricingRule(val item: Item, val quantity: Int, val price: Int) {
 
-    fun calculateDiscount(cart: Map<Item, Int>): Int {
-        val itemQty = cart.getOrElse(item) {0}
+    var successor: PricingRule? = null
+
+    fun calculateDiscount(cart: Map<Item, Int>, currentDiscount: Int): Int {
+        val itemQty = cart.getOrElse(item) { 0 }
+
         if (isDiscountable(itemQty)) {
             // Quantity to apply (e.g. if 2 for 130 and item qty is 7, discountable qty is 3
-            val discountableQty = itemQty.div(quantity)
+            val discountableQty = itemQty / quantity
 
             // Original price of discountable item, not including extra quantities that cannot be discounted
             val originalPriceOfDiscountableItems = (discountableQty * quantity) * item.unitPrice
 
-            // Discount applied at checkout
-            return originalPriceOfDiscountableItems - (discountableQty * price)
+            // Discount applied at checkout, added to current discount
+            return (currentDiscount + (originalPriceOfDiscountableItems - (discountableQty * price)))
+                    .let { successor?.calculateDiscount(cart, it) ?: it }
         } else {
-            return 0
+            return currentDiscount.let { successor?.calculateDiscount(cart, it) ?: it }
         }
     }
 
     fun isDiscountable(itemQty: Int): Boolean {
         return itemQty >= quantity
     }
+
 }

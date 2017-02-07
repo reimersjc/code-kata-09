@@ -13,11 +13,8 @@ class CheckOutSpec : Spek ({
     describe("totals") {
 
         fun price(skus: String): Int {
-            val itemDAO = ItemDAO()
-            val checkOut = CheckOut(setOf(
-                    PricingRule(itemDAO.getItem("A"), 3, 130),
-                    PricingRule(itemDAO.getItem("B"), 2, 45)))
-            skus.split("").forEach { sku -> if (sku != "") {checkOut.scan(sku)} }
+            val checkOut = CheckOut()
+            skus.split("").filter{ it != "" }.forEach { checkOut.scan(it) }
             return checkOut.total()
         }
 
