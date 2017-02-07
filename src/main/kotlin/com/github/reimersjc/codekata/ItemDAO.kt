@@ -5,15 +5,15 @@ package com.github.reimersjc.codekata
  */
 class ItemDAO {
 
-    val mockItems = mapOf<String, Item>(
-            "A" to Item("A", 50),
-            "B" to Item("B", 30),
-            "C" to Item("C", 20),
-            "D" to Item("D", 15))
+    val mockItems = listOf<Item>(
+            Item("A", 50),
+            Item("B", 30),
+            Item("C", 20),
+            Item("D", 15)
+    )
 
     fun getItem(sku: String): Item {
-        return mockItems.getOrElse(sku) {
-            throw IllegalArgumentException("item not in inventory!")
-        }
+        return mockItems.find { item -> item.sku == sku } ?: throw IllegalArgumentException("item not in inventory!")
     }
+
 }
