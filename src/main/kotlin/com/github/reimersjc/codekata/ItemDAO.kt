@@ -5,7 +5,7 @@ package com.github.reimersjc.codekata
  */
 class ItemDAO {
 
-    val mockItems = listOf<Item>(
+    val inventory = listOf<Item>(
             Item("A", 50),
             Item("B", 30),
             Item("C", 20),
@@ -13,7 +13,7 @@ class ItemDAO {
     )
 
     fun getItem(sku: String): Item {
-        return mockItems.find { item -> item.sku == sku } ?: throw IllegalArgumentException("item not in inventory!")
+        return inventory.find { item -> item.sku == sku } ?: throw IllegalArgumentException("item not in inventory!")
     }
 
 }
